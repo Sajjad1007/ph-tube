@@ -42,16 +42,16 @@
   </script>
 </head>
 
-<body class="font-inter min-h-screen flex flex-col">
+<body class="font-inter min-h-screen flex flex-col overflow-y-scroll">
   <header class="py-1 lg:py-3 px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 container mx-auto">
     <nav class="lg:mb-3 border-b border-secondary-black border-opacity-20">
       <div class="mb-1 lg:mb-3 navbar p-0 flex items-center justify-between">
-        <div onclick="location.reload()">
+        <div onclick="window.location.href='./index.html'">
           <a class="btn btn-ghost text-2xl lg:text-3xl p-0"><img src="./assets/logo.png" loading="lazy" alt="Logo"
               class="w-40"></a>
         </div>
         <label class="input input-bordered h-10 hidden sm:flex px-3">
-          <input id="search-btn" type="text" class="grow text-sm" placeholder="Search" />
+          <input id="search-input" type="text" class="grow text-sm" placeholder="Search" />
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-5 w-5 opacity-70">
             <path fill-rule="evenodd"
               d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
@@ -72,17 +72,17 @@
     </nav>
   </header>
 
-  <main class="px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 container mx-auto mb-2 flex-1 flex justify-center items-center">
+  <main class="px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 container mx-auto mb-2 flex-1 flex justify-center">
     <section id="video-container"
       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-1 flex-1 max-w-96 sm:max-w-none mx-auto">
     </section>
 
-    <section id="loader" class="mb-16 hidden">
+    <section id="loader" class="mb-16 hidden self-center">
       <span class="loading loading-dots loading-lg"></span>
     </section>
 
     <dialog id="modal" class="modal">
-      <div id="modal-card" class="modal-box rounded-xl max-w-lg p-4 pb-2 card card-compact max-h-md">
+      <div id="modal-box" class="modal-box rounded-xl max-w-lg p-4 pb-2 card card-compact max-h-md">
       </div>
       <form method="dialog" class="modal-backdrop">
         <button>close</button>

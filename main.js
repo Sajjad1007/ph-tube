@@ -1,5 +1,5 @@
 const sortButton = document.getElementById("sort-btn");
-const searchButton = document.getElementById("search-btn");
+const searchInput = document.getElementById("search-input");
 const buttonContainer = document.getElementById("btn-container");
 const buttonAll = document.getElementById("btn-all");
 const videoContainer = document.getElementById("video-container");
@@ -51,6 +51,7 @@ const displayCategoryButtons = (categoryObjects) => {
     buttonContainer.appendChild(button);
 
     button.addEventListener("click", (event) => {
+      searchInput.value = "";
       removeActiveButtons();
       button.classList.remove("non-active-btn");
       button.classList.add("active-btn");
@@ -59,35 +60,19 @@ const displayCategoryButtons = (categoryObjects) => {
   });
 };
 
-const fetchAllVideos = (input, sorted = false) => {
-  let isLoaded = false;
-
-  if (input === undefined) {
-    isLoaded = true;
-    input = "";
-  }
+const fetchAllVideos = (sorted = false) => {
+  searchInput.value = "";
   removeActiveButtons();
+  buttonAll.classList.remove("non-active-btn");
+  buttonAll.classList.add("active-btn");
   showLoader();
-  fetch(
-    `https://openapi.programming-hero.com/api/phero-tube/videos?title=${input}`
-  )
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/videos`)
     .then((res) => res.json())
     .then((object) => {
       if (sorted) {
         object.videos.sort(
           (a, b) => parseFloat(b.others.views) - parseFloat(a.others.views)
         );
-      }
-      if (input === "") {
-        if (isLoaded) {
-          buttonAll.classList.remove("non-active-btn");
-          buttonAll.classList.add("active-btn");
-        }
-        document.body.classList.remove("overflow-y-scroll");
-        document.body.classList.add("overflow-y-auto");
-      } else {
-        document.body.classList.remove("overflow-y-auto");
-        document.body.classList.add("overflow-y-scroll");
       }
       hideLoader();
       displayVideos(object.videos);
@@ -106,10 +91,21 @@ const fetchCategoryVideos = (categoryId, sorted = false) => {
           (a, b) => parseFloat(b.others.views) - parseFloat(a.others.views)
         );
       }
-      document.body.classList.remove("overflow-y-scroll");
-      document.body.classList.add("overflow-y-auto");
       hideLoader();
       displayVideos(object.category);
+    });
+};
+
+const fetchSearchVideos = (input) => {
+  removeActiveButtons();
+  showLoader();
+  fetch(
+    `https://openapi.programming-hero.com/api/phero-tube/videos?title=${input}`
+  )
+    .then((res) => res.json())
+    .then((object) => {
+      hideLoader();
+      displayVideos(object.videos);
     });
 };
 
@@ -117,8 +113,6 @@ const displayVideos = (videoObjects) => {
   videoContainer.innerHTML = "";
 
   if (videoObjects.length === 0) {
-    document.body.classList.remove("overflow-y-auto");
-    document.body.classList.add("overflow-y-scroll");
     videoContainer.innerHTML = `
       <div class="col-span-full place-self-center flex flex-col justify-center items-center gap-4 mb-16">
         <img src="./assets/icon.png" loading="lazy" alt="Icon" class="w-28">
@@ -145,7 +139,7 @@ const displayVideos = (videoObjects) => {
       "hover:cursor-pointer"
     );
     div.innerHTML = `
-      <figure class="relative hover:opacity-75">
+      <figure class="relative hover:opacity-80">
         <img src="${videoObject.thumbnail}" loading="lazy" alt="Thumbnail"
               class="rounded-lg h-[11.5rem] w-full object-cover" />
         <p class="absolute bottom-2 right-2 text-xs px-2 py-1 rounded bg-primary-black text-white ${
@@ -203,39 +197,38 @@ const removeActiveButtons = () => {
 const showVideoDetails = (videoId) => {
   fetch(`https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`)
     .then((res) => res.json())
-    .then((videoObject) => {
+    .then((object) => {
+      document.getElementById("modal-box").innerHTML = `
+        <figure>
+          <img
+            src="${object.video.thumbnail}" loading="lazy"
+            alt="Thumbnail" class="w-full object-cover" />
+        </figure>
+        <div class="card-body gap-1 mt-2">
+          <h3 class="card-title text-secondary-black font-bold text-xl">${object.video.title}</h3>
+          <p class="">${object.video.description}</p>
+        </div>
+      `;
       document.body.classList.remove("overflow-y-scroll");
       document.body.classList.add("overflow-y-auto");
-      document.getElementById("modal-card").innerHTML = `
-      <figure>
-        <img
-          src="${videoObject.video.thumbnail}" loading="lazy"
-          alt="Thumbnail" class="w-full object-cover" />
-      </figure>
-      <div class="card-body gap-1 mt-2">
-        <h3 class="card-title text-secondary-black font-bold text-xl">${videoObject.video.title}</h3>
-        <p class="">${videoObject.video.description}</p>
-      </div>
-    `;
       modal.showModal();
     });
 };
 
-searchButton.addEventListener("focus", (event) => {
+searchInput.addEventListener("focus", (event) => {
   sortButton.disabled = true;
   removeActiveButtons();
-  document.body.classList.remove("overflow-y-auto");
-  document.body.classList.add("overflow-y-scroll");
 });
 
-searchButton.addEventListener("keyup", (event) => {
-  fetchAllVideos(event.target.value);
+searchInput.addEventListener("keyup", (event) => {
+  fetchSearchVideos(event.target.value);
 });
 
-searchButton.addEventListener("blur", (event) => {
+searchInput.addEventListener("blur", (event) => {
   if (event.target.value == "") {
     sortButton.disabled = false;
-    fetchAllVideos();
+    buttonAll.classList.remove("non-active-btn");
+    buttonAll.classList.add("active-btn");
   }
 });
 
@@ -245,7 +238,7 @@ sortButton.addEventListener("click", (event) => {
     .id.split("-")[1];
 
   if (categoryId === "all") {
-    fetchAllVideos(undefined, true);
+    fetchAllVideos(true);
   } else {
     fetchCategoryVideos(categoryId, true);
   }
@@ -257,4 +250,4 @@ modal.addEventListener("close", (event) => {
 });
 
 fetchAllCategories();
-fetchAllVideos(undefined);
+fetchAllVideos();
