@@ -4,7 +4,7 @@
 
 Welcome to **PH Tube**, a modern and fully responsive website of a video streaming application designed to browse and watch videos online. The project aims to provide an engaging and seamless user experience, ensuring a visually appealing layout with easy accessibility on mobile, tablet and desktop devices.
 
-### [Click here](https://ph-tube-sajjadur-rahman.netlify.app/) to visit the website.
+### [Click here](https://ph-tube-by-sajjadur-rahman.netlify.app/) to visit the website.
 
 ## Technologies Used
 
