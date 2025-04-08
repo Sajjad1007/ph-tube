@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PH-Tube</title>
+  <link rel="shortcut icon" href="./assets/icon.png" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <style>
+    .non-active-btn {
+      background-color: rgba(37, 37, 37, 0.15) !important;
+      color: #252525 !important;
+    }
+
+    .active-btn {
+      background-color: #ff1f3d !important;
+      color: white !important;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            "inter": ["Inter", "sans-serif"]
+          },
+          colors: {
+            "primary": "#ff1f3d",
+            "primary-black": "#252525",
+            "secondary-black": "#171717"
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="font-inter min-h-screen flex flex-col overflow-y-scroll">
+  <header class="py-1 lg:py-3 px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 container mx-auto">
+    <nav class="lg:mb-3 border-b border-secondary-black border-opacity-20">
+      <div class="mb-1 lg:mb-3 navbar p-0 flex items-center justify-between">
+        <div onclick="window.location.href='./index.html'">
+          <a class="btn btn-ghost text-2xl lg:text-3xl p-0"><img src="./assets/logo.png" loading="lazy" alt="Logo"
+              class="w-40"></a>
+        </div>
+        <label class="input input-bordered h-10 hidden sm:flex px-3">
+          <input id="search-input" type="text" class="grow text-sm" placeholder="Search" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-5 w-5 opacity-70">
+            <path fill-rule="evenodd"
+              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+              clip-rule="evenodd" />
+          </svg>
+        </label>
+        <button id="sort-btn"
+          class="btn btn-neutral bg-primary-black hover:bg-primary-black bg-opacity-15 hover:bg-opacity-15 border-none text-primary-black hover:text-primary-black text-base px-5 rounded-md h-10 min-h-9 font-medium md:w-40">
+          Sort<span class="hidden md:inline"> By Views</span>
+        </button>
+      </div>
+    </nav>
+
+    <nav id="btn-container"
+      class="grid grid-cols-4 place-content-center sm:flex sm:justify-center sm:items-center gap-2 sm:gap-6 my-6">
+      <button onclick="fetchAllVideos()" id="btn-all"
+        class="btn btn-neutral border-none text-base px-5 rounded-md h-8 min-h-9 font-medium active-btn">All</button>
+    </nav>
+  </header>
+
+  <main class="px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 container mx-auto mb-2 flex-1 flex justify-center">
+    <section id="video-container"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-1 flex-1 max-w-96 sm:max-w-none mx-auto">
+    </section>
+
+    <section id="loader" class="mb-16 hidden self-center">
+      <span class="loading loading-dots loading-lg"></span>
+    </section>
+
+    <dialog id="modal" class="modal">
+      <div id="modal-box" class="modal-box rounded-xl max-w-lg p-4 pb-2 card card-compact max-h-md">
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+  </main>
+
+  <script src="./main.js"></script>
+</body>
+
+</html>
